@@ -94,4 +94,4 @@ def getCommodityPrice (start_date, end_date, commodity, interval='Daily'):
     price = data.iloc[:,1].apply(lambda x: float(str(x).replace(',', '')))
     mean = price.mean()
     variance = price.var()
-    return mean, variance
+    return commodity, mean, variance
