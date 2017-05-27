@@ -21,6 +21,10 @@ def getCommodityPrice (start_date, end_date, commodity, interval='Daily'):
     
         commodity: String literal
             Available options: {gold, silver}
+            
+        Interval: String (Optional)
+            Default: Daily
+            Available options: {Daily, Weekly, Monthly}
    
     Output: tuple array of integer
             (mean, variance)
@@ -53,7 +57,8 @@ def getCommodityPrice (start_date, end_date, commodity, interval='Daily'):
     #Safe guard against invalid commodity
     if commodity != 'gold'and commodity != 'silver':
         raise ValueError('Input commodity must be silver or gold')
-        
+    
+    #AJAX request payload packaging
     response = session.post(
     url=ajax_endpoint,
     data={
@@ -69,6 +74,7 @@ def getCommodityPrice (start_date, end_date, commodity, interval='Daily'):
         "X-Requested-With": "XMLHttpRequest"
     })
     
+    #HTML parser that looks for curr_table similar to the default function
     tree = html.fromstring(response.text)
     data = tree.xpath(xpath_pattern)
     file_name = ''.join([commodity, file_extension])

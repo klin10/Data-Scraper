@@ -7,11 +7,11 @@ import pandas as pd
 
 def getDefaultCommodityPrice ():
     '''
-    Default scraper that fetch from two end point (gold and silver)
-    Uses session and xpath to fetch data from the end point
+    Default scraper that fetch from two end investing.com point (gold and silver)
+    Uses session and xpath to scrap the xml data by locating the curr_table
     
     Output: Return void
-        Two files in the ./ with gold.xlsx and silver.xlsx
+        Two files in the current directory with gold.xlsx and silver.xlsx
     '''
     commodities = ['gold', 'silver']
     hist_substring = '-historical-data'
@@ -22,11 +22,14 @@ def getDefaultCommodityPrice ():
     header = {'User-Agent': 'Mozilla/5.0'}
 
     for commodity in commodities:
+        #open request and fetch raw data
         req = Request(''.join([end_point,commodity,hist_substring]), headers=header)
         webpage = urlopen(req).read()
         tree = html.fromstring(webpage)
+        #locate the table content
         data = tree.xpath(xpath_pattern)
         filename = ''.join([commodity, file_extension])
+        #Write to CSV
         with open(filename, 'wb') as f:
             writer = csv.writer(f)
             writer.writerow(csv_column)
